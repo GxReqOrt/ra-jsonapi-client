@@ -25,12 +25,12 @@ export default () => {
 
       return newConfig;
     },
-    err => Promise.reject(err),
+    (err) => Promise.reject(err),
   );
 
   // Response interceptor
   axios.interceptors.response.use(
-    response => response,
+    (response) => response,
     (error) => {
       const { status, data } = error.response;
 

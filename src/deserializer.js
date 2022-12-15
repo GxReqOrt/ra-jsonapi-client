@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 export default ({ data, included }, total) => {
-  const includedMap = new Map(included?.map(resource => [`${resource.type}-${resource.id}`, resource.attributes]) ?? []);
+  const includedMap = new Map(included?.map((resource) => [`${resource.type}-${resource.id}`, resource.attributes]) ?? []);
 
   const deserializeSingleRelationship = ({ id, type }) => ({
     id,
     ...includedMap.get(`${type}-${id}`),
   });
 
-  const deserializeRelationships = relationships => Object.keys(relationships ?? {}).reduce((acum, cur) => (
+  const deserializeRelationships = (relationships) => Object.keys(relationships ?? {}).reduce((acum, cur) => (
     relationships[cur].data
       ? {
         ...acum,

@@ -1,3 +1,3 @@
-const isObject = obj => JSON.stringify(obj).startsWith('{');
+const isObject = (obj) => JSON.stringify(obj).startsWith('{');
 
 export default isObject;

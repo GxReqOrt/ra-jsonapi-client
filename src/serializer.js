@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import isObject from './utils';
 
-export default relationshipsMap => (type, { id, ...objectToSerialize }) => {
-  const isRelationship = key => !!relationshipsMap[type]?.[key];
+export default (relationshipsMap) => (type, { id, ...objectToSerialize }) => {
+  const isRelationship = (key) => !!relationshipsMap[type]?.[key];
 
   return JSON.stringify({
     data: {
@@ -17,7 +17,7 @@ export default relationshipsMap => (type, { id, ...objectToSerialize }) => {
                 relationships: {
                   ...(acum.relationships ?? {}),
                   [key]: {
-                    data: value.map(val => ({
+                    data: value.map((val) => ({
                       type: relationshipsMap[type][key],
                       id: isObject(val) ? val.id : val,
                     })),

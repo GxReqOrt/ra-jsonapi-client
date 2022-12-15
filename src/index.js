@@ -45,13 +45,12 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
 
   const include = Object.keys(settings.relationshipsMap?.[resource] ?? {}).join(',');
 
-  const query = {
+  let query = {
     include: include !== '' ? include : undefined,
   };
 
   switch (type) {
     case GET_LIST:
-    case GET_MANY_REFERENCE:
       // Create query with pagination params and include declared relationships.
       query['page[number]'] = params.pagination.page;
       query['page[size]'] = params.pagination.perPage;
@@ -99,7 +98,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
       break;
 
     case GET_MANY: {
-      const query = stringify({
+      query = stringify({
         [`filter[${settings.getManyKey}]`]: params.ids,
       }, { arrayFormat: settings.arrayFormat });
 
@@ -111,7 +110,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
       const { page, perPage } = params.pagination;
 
       // Create query with pagination params.
-      const query = {
+      query = {
         'page[number]': page,
         'page[size]': perPage,
       };
