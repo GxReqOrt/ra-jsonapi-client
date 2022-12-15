@@ -51,6 +51,8 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
 
   switch (type) {
     case GET_LIST:
+    case GET_MANY:
+    case GET_MANY_REFERENCE:
       // Create query with pagination params and include declared relationships.
       query['page[number]'] = params.pagination.page;
       query['page[size]'] = params.pagination.perPage;
@@ -97,41 +99,41 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
       options.method = 'DELETE';
       break;
 
-    case GET_MANY: {
-      query = stringify({
-        [`filter[${settings.getManyKey}]`]: params.ids,
-      }, { arrayFormat: settings.arrayFormat });
+    // case GET_MANY: {
+    //   query = stringify({
+    //     [`filter[${settings.getManyKey}]`]: params.ids,
+    //   }, { arrayFormat: settings.arrayFormat });
 
-      url = `${apiUrl}/${resource}?${query}`;
-      break;
-    }
+    //   url = `${apiUrl}/${resource}?${query}`;
+    //   break;
+    // }
 
-    case GET_MANY_REFERENCE: {
-      const { page, perPage } = params.pagination;
+    // case GET_MANY_REFERENCE: {
+    //   const { page, perPage } = params.pagination;
 
-      // Create query with pagination params.
-      query = {
-        'page[number]': page,
-        'page[size]': perPage,
-      };
+    //   // Create query with pagination params.
+    //   query = {
+    //     'page[number]': page,
+    //     'page[size]': perPage,
+    //   };
 
-      // Add all filter params to query.
-      Object.keys(params.filter || {}).forEach((key) => {
-        query[`filter[${key}]`] = params.filter[key];
-      });
+    //   // Add all filter params to query.
+    //   Object.keys(params.filter || {}).forEach((key) => {
+    //     query[`filter[${key}]`] = params.filter[key];
+    //   });
 
-      // Add the reference id to the filter params.
-      query[`filter[${params.target}]`] = params.id;
+    //   // Add the reference id to the filter params.
+    //   query[`filter[${params.target}]`] = params.id;
 
-      // Add sort parameter
-      if (params.sort && params.sort.field) {
-        const prefix = params.sort.order === 'ASC' ? '' : '-';
-        query.sort = `${prefix}${params.sort.field}`;
-      }
+    //   // Add sort parameter
+    //   if (params.sort && params.sort.field) {
+    //     const prefix = params.sort.order === 'ASC' ? '' : '-';
+    //     query.sort = `${prefix}${params.sort.field}`;
+    //   }
 
-      url = `${apiUrl}/${resource}?${stringify(query)}`;
-      break;
-    }
+    //   url = `${apiUrl}/${resource}?${stringify(query)}`;
+    //   break;
+    // }
 
     default:
       throw new NotImplementedError(`Unsupported Data Provider request type ${type}`);
